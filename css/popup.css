@@ -1,0 +1,405 @@
+body {
+  width: 400px;
+  height: 600px;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+#settingsButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.content {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.info-box, .email-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+  min-height: 100px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.info-box pre {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.email-box {
+  white-space: pre-wrap;
+  padding: 15px;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #4CAF50;
+}
+
+.section-content {
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+.email-controls {
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.chat-section {
+  margin-top: 15px;
+}
+
+.chat-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 200px;
+  overflow-y: auto;
+  padding: 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#messageInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.message {
+  margin-bottom: 12px;
+  max-width: 90%;
+  clear: both;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.user-message {
+  background-color: #e3f2fd;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-left: auto;
+  float: right;
+  border-top-right-radius: 2px;
+  font-family: inherit;
+}
+
+.ai-message {
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 10px 12px;
+  float: left;
+  border-top-left-radius: 2px;
+  font-family: inherit;
+  text-align: left;
+}
+
+/* 添加通知样式 */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: white;
+  z-index: 1000;
+  animation: slide-in 0.3s ease-out;
+}
+
+.notification.info {
+  background-color: #2196F3;
+}
+
+.notification.success {
+  background-color: #4CAF50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.notification.fade-out {
+  animation: fade-out 0.5s ease-out forwards;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* 添加加载动画 */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.language-tabs {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.tab-button {
+  padding: 5px 15px;
+  border: 1px solid #ddd;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.tab-button.active {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+  opacity: 1;
+}
+
+.email-box-container {
+  display: none;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.email-box-container.active {
+  display: block;
+}
+
+.email-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  min-height: 100px;
+  padding-right: 40px; /* 为复制按钮留出空间 */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  display: block; /* 确保邮件内容显示 */
+}
+
+.copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  padding: 5px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  z-index: 1;
+}
+
+.copy-button:hover {
+  opacity: 1;
+}
+
+/* 为邮件内容添加特殊样式 */
+.ai-message.email-content {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  width: 95%;
+  font-family: inherit;
+  line-height: 1.8;
+}
+
+/* 功能切换标签样式 */
+.function-tabs {
+  display: flex;
+  background: #fff;
+  padding: 10px 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.function-tab {
+  background: none;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  padding: 8px 15px;
+  margin-right: 5px;
+  border-radius: 4px 4px 0 0;
+  color: #666;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.function-tab.active {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+  opacity: 1;
+}
+
+/* 内容区域样式 */
+.function-content {
+  display: none;
+}
+
+.function-content.active {
+  display: block;
+}
+
+/* SEO部分样式 */
+.keywords-section {
+  margin-bottom: 20px;
+}
+
+.keywords-controls {
+  margin-bottom: 10px;
+}
+
+.keywords-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#keywordsInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.keywords-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  min-height: 40px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.keyword-tag {
+  background: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: default;
+  user-select: text;
+}
+
+.keyword-tag .remove {
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0 4px;
+  font-size: 16px;
+  line-height: 1;
+  user-select: none;
+}
+
+.keyword-tag .remove:hover {
+  opacity: 1;
+  color: #f44336;
+}
+
+.article-box-container {
+  position: relative;
+}
+
+.article-box {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  min-height: 200px;
+  padding-right: 40px; /* 为复制按钮留出空间 */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+} 

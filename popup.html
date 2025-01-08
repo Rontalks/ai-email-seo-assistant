@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Email Assistant</title>
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>AI 邮件助手</h1>
+      <button id="settingsButton" title="Settings">⚙️</button>
+    </div>
+
+    <div class="function-tabs">
+      <button class="function-tab active" data-function="email">写邮件</button>
+      <button class="function-tab" data-function="seo">写SEO文章</button>
+    </div>
+
+    <div class="content">
+      <div class="function-content email-content active">
+        <div class="email-section">
+          <h2>生成的邮件</h2>
+          <div class="email-controls">
+            <button id="generateButton">生成邮件</button>
+            <button id="regenerateButton" disabled>重新生成</button>
+            <div class="language-tabs">
+              <button class="tab-button active" data-lang="en">英文</button>
+              <button class="tab-button" data-lang="other">其他语言</button>
+            </div>
+          </div>
+          <div id="emailContent" class="email-container">
+            <div class="email-box-container active">
+              <div id="englishEmail" class="email-box" contenteditable="true"></div>
+              <button class="copy-button" data-target="englishEmail" title="Copy email">📋</button>
+            </div>
+            <div class="email-box-container">
+              <div id="otherEmail" class="email-box" contenteditable="true"></div>
+              <button class="copy-button" data-target="otherEmail" title="Copy email">📋</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-section">
+          <div id="chatMessages" class="chat-box"></div>
+          <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="输入您的消息...">
+            <button id="sendButton">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="function-content seo-content">
+        <div class="keywords-section">
+          <h2>关键词</h2>
+          <div class="keywords-controls">
+            <button id="extractKeywordsBtn">提取关键词</button>
+            <button id="expandKeywordsBtn">扩充关键词</button>
+          </div>
+          <div class="keywords-input-group">
+            <input type="text" id="keywordsInput" placeholder="手动输入关键词或从页面提取...">
+            <button id="addKeywordBtn" title="添加关键词">添加</button>
+          </div>
+          <div class="keywords-list" id="keywordsList">
+            <!-- 关键词标签会在这里显示 -->
+          </div>
+        </div>
+        
+        <div class="article-section">
+          <h2>SEO文章</h2>
+          <div class="article-controls">
+            <button id="generateArticleBtn">生成文章</button>
+            <button id="regenerateArticleBtn" disabled>重新生成</button>
+          </div>
+          <div class="article-container">
+            <div class="article-box-container">
+              <div id="articleContent" class="article-box" contenteditable="true"></div>
+              <button class="copy-button" data-target="articleContent" title="复制文章">📋</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/popup.js"></script>
+</body>
+</html> 

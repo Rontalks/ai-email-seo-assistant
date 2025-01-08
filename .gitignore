@@ -1,0 +1,21 @@
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# API keys and secrets
+.env
+
+# Node modules (if you have any)
+node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db 
