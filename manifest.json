@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AI Email Assistant",
+  "name": "AI 邮件助手",
   "version": "1.0",
-  "description": "AI powered email assistant for international trade",
+  "description": "基于 AI 的外贸邮件和 SEO 文章助手",
   "permissions": [
     "storage",
     "activeTab",
