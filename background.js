@@ -64,50 +64,69 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function handleEmailGeneration(pageContent) {
-  // 解析页面内容
   const content = JSON.parse(pageContent);
-  
   const settings = await chrome.storage.sync.get(['apiProvider', 'apiKey', 'rolePrompt']);
   
-  // 构建提示信息
   const prompt = `
-You are an experienced international trade professional. Based on the following information, please write a business development email:
-${content.language === 'en' ? 'Write the email in English.' : 'Write two versions of the email: one in English and one in ' + content.language}
+You are an experienced international trade professional. Write a detailed and professional business development email following these specific guidelines:
+Important: Return ONLY the email content without any introduction or explanation text.
 
-Page Information:
+Based on this page information:
 - Title: ${content.title}
 - URL: ${content.url}
-- Company: ${JSON.stringify(content.companyInfo)}
-- Product: ${JSON.stringify(content.productInfo)}
+- Company Information: ${JSON.stringify(content.companyInfo)}
+- Product Information: ${JSON.stringify(content.productInfo)}
 - Main Content: ${content.mainContent}
 
-Requirements for the email:
-1. Be professional and courteous
-2. Reference specific details from the provided information
-3. Focus on building business relationships
-4. Include a clear call to action
-5. Keep each email concise (150-200 words)
-6. Use proper email format:
-   - Subject line
-   - Greeting
-   - Introduction paragraph
-   - Main content (2-3 paragraphs)
-   - Call to action
-   - Professional closing
+Write a business development email that:
+- References specific products/services from the page
+- Shows understanding of their business
+- Uses relevant details from their company information
+
+Email Structure:
+1. Subject Line: Create a compelling and specific subject line
+2. Professional Greeting: Use appropriate business salutation
+3. Opening Paragraph: 
+   - Use the role information provided in the system message for self-introduction
+   - Reference to their company/products specifically
+   - Show clear understanding of their business
+4. Main Body (2-3 paragraphs):
+   - Highlight specific products/services of interest
+   - Explain potential collaboration opportunities
+   - Demonstrate value proposition
+   - Include relevant technical or business details
+5. Call to Action:
+   - Clear and specific next steps
+   - Suggest a meeting or call
+6. Professional Closing:
+   - Use the identity information from the system message
+   - Contact information
+
+Important: Do not use placeholders like [Your Name] or [Your Company]. 
+Instead, use the identity information provided in the system message.
+
 ${content.language !== 'en' ? `
-7. Format the response as:
+Format the response EXACTLY as:
 
 === English Email ===
 Subject: [Subject line]
-[Full email content with proper spacing]
+[Full email content with proper spacing and formatting]
 
 === ${content.language} Email ===
 Subject: [Subject line]
-[Full email content with proper spacing]` : ''}
+[Full email content with proper spacing and formatting]
+
+Note: Do not include any other text, explanations, or introductions before or after the email content.
+` : ''}
 `;
 
   const messages = [
-    {role: 'system', content: settings.rolePrompt || 'You are a professional international trade expert.'},
+    {
+      role: 'system',
+      content: `${settings.rolePrompt || 'You are a professional international trade expert.'} 
+      Important: Use this role information for the email signature and self-introduction. 
+      Do not use placeholders like [Your Name] or [Your Company].`
+    },
     {role: 'user', content: prompt}
   ];
 
@@ -131,39 +150,26 @@ async function handleKeywordsExtraction(pageContent) {
   const settings = await chrome.storage.sync.get(['apiProvider', 'apiKey', 'seoRolePrompt']);
   
   const prompt = `
-You are an SEO expert. Analyze this content and:
+  You are an SEO expert. Based on the following content, extract the most relevant keywords:
 
-1. First, identify the core topic and main focus of the content.
+  Content:
+  Title: ${content.title}
+  URL: ${content.url}
+  Company Info: ${JSON.stringify(content.companyInfo)}
+  Product Info: ${JSON.stringify(content.productInfo)}
+  Main Content: ${content.mainContent}
 
-2. Then, extract ONLY the most essential keywords by following these rules:
-  - Focus on the primary product/service/solution (max 2-3 terms)
-  - Include the main industry or sector term (1-2 terms)
-  - Add the key technological or methodological terms (2-3 terms)
-  - Include the brand name if significant
-
-Important:
-- Extract only keywords that are absolutely central to the content
-- Limit to 5-7 most critical keywords total
-- Prioritize specific, technical terms over generic ones
-- Each keyword should be directly related to the core topic
-
-Format your response as follows:
-
-Summary:
-[One sentence describing the core topic]
-
-Keywords:
-[Comma-separated list of 5-7 most essential keywords, ordered by importance]
-
-Note: These should be the absolute core keywords that best represent the content's focus.
-
-Content:
-Title: ${content.title}
-URL: ${content.url}
-Company Info: ${JSON.stringify(content.companyInfo)}
-Product Info: ${JSON.stringify(content.productInfo)}
-Main Content: ${content.mainContent}
-`;
+  Requirements:
+  1. Focus on the most important and relevant keywords only
+  2. Include:
+     - Main product/service names
+     - Key technical terms
+     - Important brand names
+     - Industry-specific terms
+  3. Limit to 5-8 most critical keywords
+  4. Format your response as a simple comma-separated list
+  5. Do not include any explanations or additional text
+  `;
 
   const messages = [
     {role: 'system', content: settings.seoRolePrompt || 'You are an SEO expert.'},
@@ -171,12 +177,7 @@ Main Content: ${content.mainContent}
   ];
 
   const response = await callAI(messages, settings.apiProvider, settings.apiKey);
-  // 从响应中提取关键词部分
-  const keywordsMatch = response.match(/Keywords:\s*\n([\s\S]+)$/);
-  if (keywordsMatch && keywordsMatch[1]) {
-    return keywordsMatch[1].split(',').map(keyword => keyword.trim()).filter(Boolean);
-  }
-  throw new Error('Failed to extract keywords from the response');
+  return response.split(',').map(keyword => keyword.trim()).filter(Boolean);
 }
 
 // 处理文章生成
